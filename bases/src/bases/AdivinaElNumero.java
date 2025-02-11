@@ -1,94 +1,79 @@
 package bases;
 
 import java.util.Random;
-import java.util.Scanner;
+
+import bibliotecas.Consola_AeN;
 
 
 public class AdivinaElNumero {
-	
-	public boolean hasNextInt(boolean seleccionPartida) {
-		return seleccionPartida;
-	}
 	public static void main(String[] args) {
 		
-		Scanner scNumero = new Scanner(System.in);
-		Scanner scPartidaNueva = new Scanner(System.in);
-		int numero = new Random().nextInt(0,101);
-		int elegido;
-		int intentos = 0;
-		int intentosRestantes;
-		boolean repetida = false;
-		int partida = 1;
+		boolean salir = false;
+		Integer recordLocal = null;
+		Integer record = null;
 		
-		System.out.println("¿Quieres jugar una partida?");
-		System.out.println("1. Sí 	2. No");
-		
-		while (!scPartidaNueva.hasNextInt()) {
-			System.out.println("Error: introduce un número entero válido:");
-			System.out.println("1. Jugar   -   2. Salir");
-			scPartidaNueva.next();
-		}
-		
-		partida = scPartidaNueva.nextInt();
-		
-		if (partida == 2) {
-			System.out.println("De acuerdo, ¡hasta pronto!");
-		} else if (partida == 1) {
-			System.out.println("Acabo de pensar en un número, trata de adivinarlo. Tienes 7 intentos.");
-		
-				do {
+		do {
+			System.out.println("1. Jugar");
+			System.out.println("2. Ver récord local");
+			System.out.println("3. Salir");
+			
+			int menu = Consola_AeN.pedirEnteroRango("Elige una opción: ", 1, 3);
+			
+			switch(menu) {
+				case 1:
+					nuevaPartida(record);
 					
-					if (repetida == true) {
-						System.out.println("He pensado en otro número, intenta adivinarlo. Tienes 7 intentos.");
-						numero = new Random().nextInt(0,101);
+					break;
+				case 2:
+					if (recordLocal == null) {
+						System.out.println("Aún no se ha registrado ningún récord");
+					} else {
+						System.out.println("El récord actual es: " + recordLocal);
 					}
-					
-					
-					
-					
-					
-					elegido = scNumero.nextInt();
+					break;
+				case 3:
+					System.out.println("De acuerdo, ¡hasta luego!");
+					salir = true;
+			}
+			
+		} while (salir == false);
+		
+	}
 
-					
-					intentos ++;
-					intentosRestantes = 7 - intentos;
-					repetida = false;
-					 
-						if(numero == elegido) {
-							System.out.println("¡Genial, era el número " + numero + "! Has ganado en " + intentos + " intentos");
-							System.out.println();
-							System.out.println("¿Quieres jugar otra partida?");
-							System.out.println("1. Sí 	2. No");
-							partida = scPartidaNueva.nextInt();
-							repetida = true;
-							intentos = 0;
-						
-						} else if(intentos == 7 && numero != elegido) {
-							System.out.println("Has agotado los intentos, fin de partida. ¿Quieres jugar otra?");
-							System.out.println("1. Sí 	2. No");
-							partida = scPartidaNueva.nextInt();
-							repetida = true;
-							intentos = 0;
-						
-						}else if(numero < elegido) {
-							System.out.println("El número es menor, te quedan " + intentosRestantes + " intentos");
-							
-						} else {
-								System.out.println("El número es mayor, te quedan " + intentosRestantes + " intentos");
-							}
-						
-					
-					if (partida == 2) {
-						System.out.println("De acuerdo, ¡hasta pronto!");
-					}
-					
-					
-					
-				} while (partida == 1);
+	private static void nuevaPartida(Integer record) {
+		boolean repetirPartida = false;
+		int numAleatorio;
+		int numElegido;
+		int intentos;
+		int intentosRestantes;
 		
-		}
+		do {
+			System.out.println("Acabo de pensar en un número entre 0 y 100, adivínalo, tienes 7 intentos: ");
+			intentos = 0;
+			numAleatorio = new Random().nextInt(0,101);
+			numElegido = Consola_AeN.pedirEnteroRango("Elige un número: ", 0, 100);
+			
+			do {
+				intentos ++;
+				
+				if (numAleatorio < numElegido) {
+					intentosRestantes = 7;
+					System.out.println("El número es menor");
+					if (intentos > 0) {System.out.println("Te quedan " + intentosRestantes + " intentos");}
+					numElegido = Consola_AeN.pedirEnteroRango("", 0, 100);
+					
+				} else if (numAleatorio > numElegido) {
+					System.out.println("El número es mayor");
+					if (intentos > 0) {System.out.println("Te quedan " + intentosRestantes + " intentos");}
+					numElegido = Consola_AeN.pedirEnteroRango("", 0, 100);
+				}
+				
+			} while (numElegido == numAleatorio || intentos == 0);
+			
+			
+			
+			
+		} while (repetirPartida);
 		
-		scNumero.close();
-		scPartidaNueva.close();
 	}
 }
