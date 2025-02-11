@@ -43,22 +43,17 @@ public class AdivinaElNumero {
 						numero = new Random().nextInt(0,101);
 					}
 					
-					while (!scNumero.hasNextInt()) {
-						System.out.println("Error: introduce un número entero válido");
-						scNumero.next();
-					}
+					
+					
+					
 					
 					elegido = scNumero.nextInt();
-					while (elegido < 0 || elegido > 100) {
-						System.out.println("Error: introduce un número entero entre 0 y 100");
-						scNumero.next();
-					}
+
 					
-					int elegidoBien = scNumero.nextInt();
 					intentos ++;
 					intentosRestantes = 7 - intentos;
 					repetida = false;
-					
+					 
 						if(numero == elegido) {
 							System.out.println("¡Genial, era el número " + numero + "! Has ganado en " + intentos + " intentos");
 							System.out.println();
