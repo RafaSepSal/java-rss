@@ -9,7 +9,7 @@ public class Consola_AeN {
 	
 	//////////  FUNCIÓN PARA PEDIR UN TEXTO EN CONSOLA
 	public static String pedirTexto(String mensaje) {
-		System.out.println(mensaje + ":");
+		System.out.println(mensaje);
 		
 		return SC.nextLine();
 	}
@@ -37,7 +37,7 @@ public class Consola_AeN {
 		int entero;
 		
 		do {
-			entero = pedirEntero("Elige un número: ");
+			entero = pedirEntero(mensaje);
 			
 			if (entero < minimo || entero > maximo) {
 				System.out.println("Error: el número debe estar entre " + minimo + " y " + maximo);
