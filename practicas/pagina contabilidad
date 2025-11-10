@@ -1,0 +1,251 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { ProductCard } from "@/components/ProductCard";
+import { SimpleSearchInput } from "@/components/SimpleSearchInput";
+import { Button } from "@/components/ui/button";
+import { Filter, Grid, List, Calculator } from "lucide-react";
+
+const serviciosContabilidad = [
+  {
+    id: 1,
+    title: "Asesoría Fiscal - Gestoría López",
+    subtitle: "Gestión integral para autónomos",
+    logo: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=100&fit=crop",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop",
+    description: "Asesoría fiscal completa para autónomos y pymes. Gestión de impuestos, declaraciones, contabilidad y nóminas con atención personalizada.",
+    features: [
+      "Declaraciones trimestrales",
+      "Gestión de nóminas",
+      "Asesoramiento fiscal",
+      "Atención personalizada"
+    ],
+    rating: 4.7,
+    reviews: 890,
+    price: "45€/mes",
+    highlight: "Más Popular"
+  },
+  {
+    id: 2,
+    title: "Contasol - Software Contable",
+    subtitle: "Programa de contabilidad líder",
+    logo: "https://logos-world.net/wp-content/uploads/2023/01/Contasol-Logo.png",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    description: "Software de contabilidad completo adaptado a la normativa española. Incluye facturación, inventarios, análisis financiero y reporting.",
+    features: [
+      "Facturación electrónica",
+      "Control de inventarios",
+      "Análisis financiero",
+      "Cumplimiento normativo"
+    ],
+    rating: 4.5,
+    reviews: 1240,
+    price: "25€/mes",
+    savings: "3 meses gratis"
+  },
+  {
+    id: 3,
+    title: "Sage 50cloud - Gestión Empresarial",
+    subtitle: "ERP completo en la nube",
+    logo: "https://logos-world.net/wp-content/uploads/2020/12/Sage-Logo.png",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    description: "Sistema ERP completo que integra contabilidad, facturación, inventarios, CRM y recursos humanos en una sola plataforma cloud.",
+    features: [
+      "ERP completo",
+      "Integración total",
+      "Acceso desde cualquier lugar",
+      "Backup automático"
+    ],
+    rating: 4.6,
+    reviews: 2150,
+    price: "89€/mes",
+    highlight: "Empresas"
+  },
+  {
+    id: 4,
+    title: "A3 Asesor - Suite Profesional",
+    subtitle: "Para despachos profesionales",
+    logo: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200&h=100&fit=crop",
+    image: "https://images.unsplash.com/photo-1554224154-26032fced8bd?w=800&h=600&fit=crop",
+    description: "Suite completa para despachos profesionales. Gestión de múltiples clientes, workflow automatizado y herramientas colaborativas.",
+    features: [
+      "Gestión multi-cliente",
+      "Workflow automatizado",
+      "Portal del cliente",
+      "Firma electrónica"
+    ],
+    rating: 4.4,
+    reviews: 780,
+    price: "120€/mes",
+    highlight: "Profesional"
+  },
+  {
+    id: 5,
+    title: "Holded - Gestión Online",
+    subtitle: "Todo en uno para pymes",
+    logo: "https://logos-world.net/wp-content/uploads/2023/01/Holded-Logo.png",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop",
+    description: "Plataforma online que unifica facturación, contabilidad, inventario, proyectos y CRM. Perfecta para empresas en crecimiento.",
+    features: [
+      "Facturación automática",
+      "Control de proyectos",
+      "CRM integrado",
+      "App móvil nativa"
+    ],
+    rating: 4.8,
+    reviews: 1560,
+    price: "39€/mes",
+    savings: "30 días gratis"
+  },
+  {
+    id: 6,
+    title: "Wolters Kluwer - Tax&Legal",
+    subtitle: "Solución fiscal profesional",
+    logo: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200&h=100&fit=crop",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=600&fit=crop",
+    description: "Solución especializada en gestión fiscal y legal. Incluye base de datos jurídica, calculadoras fiscales y actualizaciones normativas.",
+    features: [
+      "Base datos jurídica",
+      "Calculadoras fiscales",
+      "Actualizaciones normativas",
+      "Consultas especializadas"
+    ],
+    rating: 4.3,
+    reviews: 450,
+    price: "180€/mes",
+    highlight: "Especializado"
+  }
+];
+
+export default function ContabilidadPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedService, setSelectedService] = useState<typeof serviciosContabilidad[0] | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const filters = [
+    { id: "all", label: "Todos", count: serviciosContabilidad.length },
+    { id: "software", label: "Software", count: 4 },
+    { id: "asesoria", label: "Asesoría", count: 2 },
+    { id: "empresas", label: "Empresas", count: 3 }
+  ];
+
+  const filteredServices = serviciosContabilidad.filter(service => {
+    const matchesSearch = service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         service.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (selectedFilter === "all") return matchesSearch;
+    if (selectedFilter === "software") return matchesSearch && service.title.includes("Software") || service.title.includes("Sage") || service.title.includes("Holded") || service.title.includes("Contasol");
+    if (selectedFilter === "asesoria") return matchesSearch && service.title.includes("Asesoría");
+    if (selectedFilter === "empresas") return matchesSearch && (service.highlight === "Empresas" || service.price === "89€/mes" || service.price === "120€/mes");
+
+    return matchesSearch;
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <section className="bg-gradient-to-br from-simplifico-blue to-simplifico-blue-light py-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center text-white"
+          >
+            <div className="flex items-center justify-center mb-6">
+              <Calculator className="w-12 h-12 mr-4" />
+              <h1 className="text-4xl md:text-5xl font-bold">
+                Contabilidad y Gestión
+              </h1>
+            </div>
+            <p className="text-xl opacity-90 max-w-3xl mx-auto">
+              Encuentra los mejores servicios de contabilidad y gestión empresarial. Software, asesorías y herramientas para tu negocio.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Search and Filters */}
+      <section className="py-8 bg-white border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            <div className="flex-1 max-w-md">
+              <SimpleSearchInput
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Buscar servicios de contabilidad..."
+                className="w-full"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex flex-wrap gap-2">
+                {filters.map((filter) => (
+                  <Button
+                    key={filter.id}
+                    variant={selectedFilter === filter.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedFilter(filter.id)}
+                    className="text-sm"
+                  >
+                    {filter.label} ({filter.count})
+                  </Button>
+                ))}
+              </div>
+              <div className="flex items-center gap-1 border rounded-lg p-1">
+                <Button variant="ghost" size="sm">
+                  <Grid className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Grid */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {filteredServices.map((service, index) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <ProductCard
+                  title={service.title}
+                  subtitle={service.subtitle}
+                  logo={service.logo}
+                  image={service.image}
+                  description={service.description}
+                  features={service.features}
+                  rating={service.rating}
+                  reviews={service.reviews}
+                  price={service.price}
+                  savings={service.savings}
+                  highlight={service.highlight}
+                  onClick={() => setSelectedService(service)}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {filteredServices.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No se encontraron servicios que coincidan con tu búsqueda.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
