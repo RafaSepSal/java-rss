@@ -1,5 +1,7 @@
 https://prod.liveshare.vsengsaas.visualstudio.com/join?00658996B2273B0CACA606BD7BBA74995BF5
 
+simplifico.es (https://simplificonew.netlify.app/)
+
 "use client";
 
 import { useState } from "react";
